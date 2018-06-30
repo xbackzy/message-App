@@ -27,7 +27,17 @@ class UserMessage{
             }
         }
     }
+    async logout(){
+        localStorage.access_token='';
+    }
 
+    async isLogin(){
+        if(localStorage.access_token===''){
+            return false;
+        }else{
+            return true;
+        }
+    }
     async register(username,password){
         try {
             const user={
@@ -43,8 +53,17 @@ class UserMessage{
                 },
                 body:JSON.stringify(user)
             })
+
+            const result=await res.json();
+            if(result.success===true){
+                localStorage.access_token=result.data.access_token
+            }
+            return result;
         } catch (error) {
-            
+            return{
+                success:false,
+                errorMessage:'网络错误'
+            }
         }
     }
 }
